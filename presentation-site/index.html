@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrailBeacon - System Architecture</title>
+    <meta name="description" content="TrailBeacon System Architecture and SQA Documentation">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Mermaid.js for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="logo512.png" alt="TrailBeacon" class="logo-icon">
+                <span>TrailBeacon</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#hardware">Hardware</a></li>
+                <li><a href="#gps">GPS</a></li>
+                <li><a href="#reliability">Reliability</a></li>
+                <li><a href="#lora">LoRa</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#sqa">SQA</a></li>
+                <li><a href="#tech">Tech Stack</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <span class="hero-badge">Final Year Project</span>
+            <h1>TrailBeacon</h1>
+            <p class="hero-subtitle">Real-time Hiker Tracking System</p>
+            <p class="hero-description">
+                A modern, scalable dashboard built with the MERN stack featuring
+                real-time location tracking, SOS alerts, and comprehensive monitoring.
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Device Types</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">10km+</span>
+                    <span class="stat-label">LoRa Range</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">8</span>
+                    <span class="stat-label">Validation Layers</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">ATGM336H</span>
+                    <span class="stat-label">Premium GPS</span>
+                </div>
+            </div>
+            <a href="#features" class="hero-cta">Explore Features</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Capabilities</span>
+                <h2>Core Features</h2>
+                <p>Comprehensive hiking event management with real-time tracking and safety monitoring</p>
+            </div>
+
+            <div class="features-showcase">
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🗺️</div>
+                    <h3>Event Management</h3>
+                    <p class="feature-showcase-desc">Create and manage multiple hiking events with complete lifecycle control</p>
+                    <ul class="feature-list">
+                        <li>Create events with start/end dates and locations</li>
+                        <li>Multiple event statuses (Planned, Active, Completed, Archived)</li>
+                        <li>Auto-completion of events based on end date</li>
+                        <li>Switch between events seamlessly</li>
+                        <li>Event-specific hiker and basecamp management</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">📍</div>
+                    <h3>Real-time Tracking</h3>
+                    <p class="feature-showcase-desc">Live GPS location tracking with interactive map visualization</p>
+                    <ul class="feature-list">
+                        <li>Real-time hiker location updates via Socket.IO</li>
+                        <li>Interactive Leaflet map with custom markers</li>
+                        <li>Multiple map styles (Default, Satellite, Terrain)</li>
+                        <li>Trail history visualization with polylines</li>
+                        <li>Auto-center on selected hiker</li>
+                        <li>Distance and altitude tracking</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🆘</div>
+                    <h3>SOS & Emergency</h3>
+                    <p class="feature-showcase-desc">Instant emergency alerts with priority handling</p>
+                    <ul class="feature-list">
+                        <li>One-tap SOS button on mobile app</li>
+                        <li>Real-time SOS notifications to dashboard</li>
+                        <li>Priority visual alerts with sound</li>
+                        <li>GPS coordinates of emergency location</li>
+                        <li>SOS history and response tracking</li>
+                        <li>Emergency contact information display</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">👥</div>
+                    <h3>Hiker Management</h3>
+                    <p class="feature-showcase-desc">Complete hiker profile management with status monitoring</p>
+                    <ul class="feature-list">
+                        <li>Add/remove hikers with detailed profiles</li>
+                        <li>Status tracking (Active, Inactive, Emergency)</li>
+                        <li>Battery level monitoring</li>
+                        <li>Contact information management</li>
+                        <li>Last update timestamp display</li>
+                        <li>Search and filter hikers</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🏕️</div>
+                    <h3>Basecamp System</h3>
+                    <p class="feature-showcase-desc">Manage multiple basecamps as checkpoints and safe zones</p>
+                    <ul class="feature-list">
+                        <li>Create basecamps with GPS coordinates</li>
+                        <li>Custom basecamp icons and markers</li>
+                        <li>Capacity and resource tracking</li>
+                        <li>Real-time basecamp status updates</li>
+                        <li>Proximity alerts when hikers approach</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🗼</div>
+                    <h3>Communication Towers</h3>
+                    <p class="feature-showcase-desc">Track cellular coverage zones for safety planning</p>
+                    <ul class="feature-list">
+                        <li>Map communication tower locations</li>
+                        <li>Coverage radius visualization</li>
+                        <li>Signal strength indicators</li>
+                        <li>Network availability zones</li>
+                        <li>Dead zone identification</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🛤️</div>
+                    <h3>Safety Tracks</h3>
+                    <p class="feature-showcase-desc">Pre-defined safe routes and trail management</p>
+                    <ul class="feature-list">
+                        <li>Create and save trail routes</li>
+                        <li>Route difficulty ratings</li>
+                        <li>Expected completion times</li>
+                        <li>Route deviation alerts</li>
+                        <li>Historical track data</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🔐</div>
+                    <h3>Authentication & Roles</h3>
+                    <p class="feature-showcase-desc">Secure access control with role-based permissions</p>
+                    <ul class="feature-list">
+                        <li>JWT-based authentication</li>
+                        <li>Secure HttpOnly cookie sessions</li>
+                        <li>Admin dashboard access control</li>
+                        <li>Public hiker view (read-only)</li>
+                        <li>Password change functionality</li>
+                        <li>Auto-logout on inactivity</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">🔗</div>
+                    <h3>Public Sharing</h3>
+                    <p class="feature-showcase-desc">Share live tracking with family and friends</p>
+                    <ul class="feature-list">
+                        <li>Generate shareable public links</li>
+                        <li>Read-only public hiker view</li>
+                        <li>No authentication required for viewers</li>
+                        <li>Live location updates</li>
+                        <li>Event-specific sharing</li>
+                        <li>Real-time synchronization</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">📊</div>
+                    <h3>Analytics & Stats</h3>
+                    <p class="feature-showcase-desc">Comprehensive statistics and activity insights</p>
+                    <ul class="feature-list">
+                        <li>Total hikers count</li>
+                        <li>Active hikers monitoring</li>
+                        <li>SOS alerts tracking</li>
+                        <li>Battery status overview</li>
+                        <li>Event completion rates</li>
+                        <li>Distance traveled statistics</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">📱</div>
+                    <h3>Responsive Design</h3>
+                    <p class="feature-showcase-desc">Seamless experience across all devices</p>
+                    <ul class="feature-list">
+                        <li>Mobile-first responsive design</li>
+                        <li>Touch-optimized controls</li>
+                        <li>Adaptive layout for tablets</li>
+                        <li>Desktop full-screen dashboard</li>
+                        <li>PWA capabilities</li>
+                        <li>Offline data caching</li>
+                    </ul>
+                </div>
+
+                <div class="feature-showcase-card">
+                    <div class="feature-showcase-icon">⚡</div>
+                    <h3>Performance</h3>
+                    <p class="feature-showcase-desc">Optimized for speed and efficiency</p>
+                    <ul class="feature-list">
+                        <li>Sub-100ms WebSocket latency</li>
+                        <li>Optimized React re-renders</li>
+                        <li>Lazy loading components</li>
+                        <li>Compressed assets with Gzip</li>
+                        <li>CDN-ready static files</li>
+                        <li>Efficient Firebase queries</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hardware Ecosystem Section -->
+    <section id="hardware" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">IoT Devices</span>
+                <h2>Three-Tier Hardware Ecosystem</h2>
+                <p>Intelligent mesh network with specialized devices for optimal performance and scalability</p>
+            </div>
+
+            <div class="diagram-card">
+                <div class="mermaid">
+                    graph TB
+                    classDef hiker fill:#48bb78,stroke:#38a169,color:white,stroke-width:2px
+                    classDef relay fill:#4299e1,stroke:#3182ce,color:white,stroke-width:2px
+                    classDef basecamp fill:#ed8936,stroke:#dd6b20,color:white,stroke-width:2px
+                    classDef cloud fill:#805ad5,stroke:#6b46c1,color:white,stroke-width:2px
+
+                    subgraph Layer1["Layer 1: Field Sensors"]
+                        Hiker1["Hiker Device 01<br/>ESP32-C3<br/>ATGM336H GPS"]:::hiker
+                        Hiker2["Hiker Device 02<br/>ESP32-C3<br/>ATGM336H GPS"]:::hiker
+                        Hiker3["Hiker Device N<br/>ESP32-C3<br/>ATGM336H GPS"]:::hiker
+                    end
+
+                    subgraph Layer2["Layer 2: Mesh Network"]
+                        Relay1["Relay Station 01<br/>ESP32 Dual-Core<br/>Range Extender"]:::relay
+                        Relay2["Relay Station 02<br/>ESP32 Dual-Core<br/>Range Extender"]:::relay
+                    end
+
+                    subgraph Layer3["Layer 3: Cloud Gateway"]
+                        Basecamp["Basecamp Station<br/>ESP32 Dual-Core<br/>8-Layer Validation<br/>WiFi + Firebase"]:::basecamp
+                    end
+
+                    subgraph Layer4["Layer 4: Cloud & Dashboard"]
+                        Firebase["Firebase RTDB"]:::cloud
+                        Dashboard["React Dashboard"]:::cloud
+                    end
+
+                    Hiker1 -->|"LoRa 433MHz<br/>2s interval"| Relay1
+                    Hiker2 -->|"LoRa 433MHz<br/>2s interval"| Relay1
+                    Hiker3 -->|"LoRa 433MHz<br/>2s interval"| Relay2
+
+                    Relay1 -->|"LoRa 433MHz<br/>Forwarding"| Basecamp
+                    Relay2 -->|"LoRa 433MHz<br/>Forwarding"| Basecamp
+
+                    Basecamp -->|"WiFi/HTTPS<br/>Validated"| Firebase
+                    Firebase <-->|"Socket.IO<br/>Real-time"| Dashboard
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🥾</div>
+                    <h3>Hiker Devices</h3>
+                    <p>Ultra-portable GPS trackers with ATGM336H multi-constellation modules (GPS+BeiDou+GLONASS)</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📡</div>
+                    <h3>Relay Stations</h3>
+                    <p>Mesh network extenders that expand range beyond 10km without requiring internet connectivity</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏕️</div>
+                    <h3>Basecamp Gateway</h3>
+                    <p>Enterprise-grade cloud gateway with 8-layer validation and dual-core processing</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Device Specifications Section -->
+    <section id="devices" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Hardware Specs</span>
+                <h2>Device Specifications</h2>
+                <p>Purpose-built devices optimized for their specific roles in the network</p>
+            </div>
+
+            <div class="device-cards">
+                <div class="device-card hiker">
+                    <div class="device-header">
+                        <span class="device-icon">🥾</span>
+                        <h3>Hiker Tracking Device</h3>
+                        <span class="device-badge">Field Sensor</span>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Platform</span>
+                            <span class="spec-value">ESP32-C3 Super Mini</span>
+                        </div>
+                        <div class="spec-item highlight">
+                            <span class="spec-label">GPS Module</span>
+                            <span class="spec-value">ATGM336H (Premium)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">GNSS Support</span>
+                            <span class="spec-value">GPS + BeiDou + GLONASS</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Radio</span>
+                            <span class="spec-value">LoRa SX1278 (433MHz)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Display</span>
+                            <span class="spec-value">Single LED (patterns)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Update Rate</span>
+                            <span class="spec-value">2 seconds (auto)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Battery Life</span>
+                            <span class="spec-value">15+ hours</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Features</span>
+                            <span class="spec-value">SOS button, Auto-send</span>
+                        </div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="device-role">Role: GPS Tracking & Transmission</span>
+                    </div>
+                </div>
+
+                <div class="device-card relay">
+                    <div class="device-header">
+                        <span class="device-icon">📡</span>
+                        <h3>Relay Station</h3>
+                        <span class="device-badge">Range Extender</span>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Platform</span>
+                            <span class="spec-value">ESP32 Dual-Core</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">GPS Module</span>
+                            <span class="spec-value">Optional</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Radio</span>
+                            <span class="spec-value">LoRa SX1278 (433MHz)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Display</span>
+                            <span class="spec-value">OLED 128×64</span>
+                        </div>
+                        <div class="spec-item highlight">
+                            <span class="spec-label">Mode</span>
+                            <span class="spec-value">Full-duplex relay</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Connectivity</span>
+                            <span class="spec-value">LoRa only (no WiFi)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Battery Life</span>
+                            <span class="spec-value">12+ hours</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Deployment</span>
+                            <span class="spec-value">Fixed positions</span>
+                        </div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="device-role">Role: Network Range Extension</span>
+                    </div>
+                </div>
+
+                <div class="device-card basecamp">
+                    <div class="device-header">
+                        <span class="device-icon">🏕️</span>
+                        <h3>Basecamp Gateway</h3>
+                        <span class="device-badge">Cloud Hub</span>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Platform</span>
+                            <span class="spec-value">ESP32 Dual-Core</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">GPS Module</span>
+                            <span class="spec-value">Optional</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Radio</span>
+                            <span class="spec-value">LoRa SX1278 (433MHz)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Display</span>
+                            <span class="spec-value">OLED 128×64 (full UI)</span>
+                        </div>
+                        <div class="spec-item highlight">
+                            <span class="spec-label">Connectivity</span>
+                            <span class="spec-value">WiFi + Firebase</span>
+                        </div>
+                        <div class="spec-item highlight">
+                            <span class="spec-label">Validation</span>
+                            <span class="spec-value">8-layer pipeline</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Processing</span>
+                            <span class="spec-value">Dual-core (non-blocking)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Queue</span>
+                            <span class="spec-value">50 packets (mutex-safe)</span>
+                        </div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="device-role">Role: Cloud Integration & Validation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ATGM336H GPS Section -->
+    <section id="gps" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Premium Hardware</span>
+                <h2>ATGM336H High-Performance GPS</h2>
+                <p>Multi-constellation GPS module for maximum accuracy and reliability</p>
+            </div>
+
+            <div class="gps-showcase">
+                <div class="gps-feature-grid">
+                    <div class="gps-feature">
+                        <div class="gps-icon">🛰️</div>
+                        <h4>Multi-Constellation</h4>
+                        <p>GPS + BeiDou + GLONASS</p>
+                        <span class="gps-detail">3 satellite systems for better coverage</span>
+                    </div>
+                    <div class="gps-feature">
+                        <div class="gps-icon">⚡</div>
+                        <h4>Low Power</h4>
+                        <p>26mA acquisition</p>
+                        <span class="gps-detail">40% less than NEO-6M</span>
+                    </div>
+                    <div class="gps-feature">
+                        <div class="gps-icon">📡</div>
+                        <h4>High Sensitivity</h4>
+                        <p>-165 dBm</p>
+                        <span class="gps-detail">Works under tree cover</span>
+                    </div>
+                    <div class="gps-feature">
+                        <div class="gps-icon">🚀</div>
+                        <h4>Fast Acquisition</h4>
+                        <p>1 second hot start</p>
+                        <span class="gps-detail">Quick GPS lock</span>
+                    </div>
+                    <div class="gps-feature">
+                        <div class="gps-icon">🎯</div>
+                        <h4>High Accuracy</h4>
+                        <p>2.5m CEP</p>
+                        <span class="gps-detail">Precise location tracking</span>
+                    </div>
+                    <div class="gps-feature">
+                        <div class="gps-icon">📊</div>
+                        <h4>33 Channels</h4>
+                        <p>Tracking channels</p>
+                        <span class="gps-detail">Maximum satellite visibility</span>
+                    </div>
+                </div>
+
+                <div class="gps-comparison">
+                    <h3>ATGM336H vs NEO-6M Comparison</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>ATGM336H (Hiker)</th>
+                                <th>NEO-6M (Basecamp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>GNSS Systems</td>
+                                <td><span class="badge-green">GPS + BeiDou + GLONASS</span></td>
+                                <td><span class="badge-blue">GPS only</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tracking Channels</td>
+                                <td><span class="badge-green">33 channels</span></td>
+                                <td><span class="badge-blue">22 channels</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sensitivity</td>
+                                <td><span class="badge-green">-165 dBm</span></td>
+                                <td><span class="badge-blue">-161 dBm</span></td>
+                            </tr>
+                            <tr>
+                                <td>Power (Acquisition)</td>
+                                <td><span class="badge-green">26mA</span></td>
+                                <td><span class="badge-blue">45mA</span></td>
+                            </tr>
+                            <tr>
+                                <td>Accuracy</td>
+                                <td><span class="badge-green">2.5m CEP</span></td>
+                                <td><span class="badge-blue">2.5m CEP</span></td>
+                            </tr>
+                            <tr>
+                                <td>Hot Start</td>
+                                <td><span class="badge-green">1 second</span></td>
+                                <td><span class="badge-blue">1 second</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Reliability Section -->
+    <section id="reliability" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Data Integrity</span>
+                <h2>8-Layer Packet Validation Pipeline</h2>
+                <p>Enterprise-grade data validation ensuring 99.7% packet reliability</p>
+            </div>
+
+            <div class="validation-pipeline">
+                <div class="pipeline-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>📡 LoRa Packet Reception</h4>
+                        <p>Receive packet from hiker/relay device via LoRa 433MHz</p>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>✅ Format Validation</h4>
+                        <p>Reject control characters (0x00-0x1F), NULL bytes, DEL characters</p>
+                        <code>validateDataFormat(packet)</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>✅ CRC-8 Checksum</h4>
+                        <p>Calculate CRC-8 using polynomial 0x07 for error detection</p>
+                        <code>uint8_t crc = calculateCRC8(packet)</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>✅ JSON Schema Validation</h4>
+                        <p>Parse and validate JSON structure with ArduinoJson</p>
+                        <code>deserializeJson(doc, packet)</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>✅ Data Sanitization</h4>
+                        <p>Clean all JSON fields, remove potentially harmful characters</p>
+                        <code>sanitizeJsonData(doc)</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h4>✅ GPS Coordinate Validation</h4>
+                        <p>Validate latitude (-90° to +90°), longitude (-180° to +180°)</p>
+                        <code>isValidLatitude() && isValidLongitude()</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">7</div>
+                    <div class="step-content">
+                        <h4>✅ Thread-Safe Queue</h4>
+                        <p>Enqueue packet with mutex protection (50 packet buffer)</p>
+                        <code>xSemaphoreTake(queueMutex)</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">8</div>
+                    <div class="step-content">
+                        <h4>✅ Firebase Upload & Retry</h4>
+                        <p>Upload to Firebase with automatic retry on failure</p>
+                        <code>Firebase.RTDB.setJSON() + retry</code>
+                    </div>
+                </div>
+                <div class="pipeline-arrow">↓</div>
+
+                <div class="pipeline-result">
+                    <div class="result-icon">☁️</div>
+                    <h4>Delivered to Cloud</h4>
+                    <p>Guaranteed data integrity from field to dashboard</p>
+                </div>
+            </div>
+
+            <div class="reliability-stats">
+                <div class="stat-card">
+                    <span class="stat-value">99.7%</span>
+                    <span class="stat-label">Packet Success Rate</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">0.3%</span>
+                    <span class="stat-label">Rejection Rate (Security Working)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">&lt;500ms</span>
+                    <span class="stat-label">End-to-End Latency</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">50</span>
+                    <span class="stat-label">Queue Capacity (Packets)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LoRa Communication Section -->
+    <section id="lora" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Wireless Technology</span>
+                <h2>LoRa Long-Range Communication</h2>
+                <p>433MHz LoRa technology for reliable 10km+ range without cellular coverage</p>
+            </div>
+
+            <div class="lora-comparison">
+                <h3>Why LoRa for Remote Tracking?</h3>
+                <table class="tech-comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Technology</th>
+                            <th>Range</th>
+                            <th>Power</th>
+                            <th>Infrastructure</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td><strong>LoRa (TrailBeacon)</strong></td>
+                            <td><span class="badge-green">✅ 10km+</span></td>
+                            <td><span class="badge-green">✅ Ultra-low</span></td>
+                            <td><span class="badge-green">✅ No infrastructure</span></td>
+                            <td><span class="badge-green">✅ License-free</span></td>
+                        </tr>
+                        <tr>
+                            <td>Cellular (4G/5G)</td>
+                            <td><span class="badge-yellow">🟡 2-5km</span></td>
+                            <td><span class="badge-red">❌ High</span></td>
+                            <td><span class="badge-red">❌ Requires cell towers</span></td>
+                            <td><span class="badge-red">❌ Monthly fees</span></td>
+                        </tr>
+                        <tr>
+                            <td>WiFi</td>
+                            <td><span class="badge-red">❌ 100m</span></td>
+                            <td><span class="badge-yellow">🟡 Medium</span></td>
+                            <td><span class="badge-red">❌ Requires router</span></td>
+                            <td><span class="badge-green">✅ Free</span></td>
+                        </tr>
+                        <tr>
+                            <td>Bluetooth</td>
+                            <td><span class="badge-red">❌ 10m</span></td>
+                            <td><span class="badge-green">✅ Low</span></td>
+                            <td><span class="badge-red">❌ Very limited</span></td>
+                            <td><span class="badge-green">✅ Free</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lora-specs">
+                <h3>LoRa Technical Configuration</h3>
+                <div class="specs-grid">
+                    <div class="spec-box">
+                        <div class="spec-icon">📻</div>
+                        <h4>Frequency</h4>
+                        <p class="spec-main">433 MHz</p>
+                        <p class="spec-sub">ISM band (license-free)</p>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-icon">📶</div>
+                        <h4>Spreading Factor</h4>
+                        <p class="spec-main">SF12</p>
+                        <p class="spec-sub">Maximum range mode</p>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-icon">⚙️</div>
+                        <h4>Bandwidth</h4>
+                        <p class="spec-main">125 kHz</p>
+                        <p class="spec-sub">Standard configuration</p>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-icon">🛡️</div>
+                        <h4>Coding Rate</h4>
+                        <p class="spec-main">4/5</p>
+                        <p class="spec-sub">Forward Error Correction</p>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-icon">🔌</div>
+                        <h4>TX Power</h4>
+                        <p class="spec-main">20 dBm</p>
+                        <p class="spec-sub">Maximum output</p>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-icon">🔑</div>
+                        <h4>Sync Word</h4>
+                        <p class="spec-main">0x34</p>
+                        <p class="spec-sub">Network isolation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="use-case-box">
+                <h3>📍 Real-World Emergency Scenario</h3>
+                <div class="scenario-steps">
+                    <div class="scenario-step">
+                        <span class="step-badge">1</span>
+                        <p><strong>Incident:</strong> Hiker injured 8km from basecamp in dense forest (no cell coverage)</p>
+                    </div>
+                    <div class="scenario-step">
+                        <span class="step-badge">2</span>
+                        <p><strong>Action:</strong> Hiker presses SOS button on device</p>
+                    </div>
+                    <div class="scenario-step">
+                        <span class="step-badge">3</span>
+                        <p><strong>Transmission:</strong> LoRa packet transmitted to relay/basecamp (works despite no cellular)</p>
+                    </div>
+                    <div class="scenario-step">
+                        <span class="step-badge">4</span>
+                        <p><strong>Validation:</strong> Packet passes through 8-layer validation pipeline</p>
+                    </div>
+                    <div class="scenario-step">
+                        <span class="step-badge">5</span>
+                        <p><strong>Alert:</strong> Dashboard receives real-time SOS with GPS coordinates</p>
+                    </div>
+                    <div class="scenario-step">
+                        <span class="step-badge">6</span>
+                        <p><strong>Response:</strong> Rescue team dispatched with exact location (lat/lng)</p>
+                    </div>
+                    <div class="scenario-step success">
+                        <span class="step-badge">✓</span>
+                        <p><strong>Outcome:</strong> Lives saved through reliable long-range communication</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Architecture Section -->
+    <section id="architecture" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Overview</span>
+                <h2>System Architecture</h2>
+                <p>End-to-end data flow from client to database through secure production infrastructure</p>
+            </div>
+
+            <div class="diagram-card">
+                <div class="mermaid">
+                    graph TD
+                    classDef user fill:#2d3748,stroke:#4a5568,color:white,stroke-width:2px
+                    classDef cloud fill:#0093E9,stroke:#0093E9,color:white
+                    classDef nginx fill:#38a169,stroke:#2f855a,color:white,stroke-width:2px
+                    classDef app fill:#4299e1,stroke:#3182ce,color:white,stroke-width:2px
+                    classDef db fill:#ed8936,stroke:#dd6b20,color:white,stroke-width:2px
+                    classDef socket fill:#805ad5,stroke:#6b46c1,color:white,stroke-width:2px
+
+                    Client["User / Client Device"]:::user
+
+                    subgraph Production["Production Environment (Docker)"]
+                    Cloudflare["Cloudflare Tunnel"]:::cloud
+                    Nginx["Nginx Reverse Proxy"]:::nginx
+
+                    subgraph Internal["Internal Network"]
+                    Frontend["React Frontend (Port 80)"]:::app
+                    Backend["Node.js Backend (Port 5000)"]:::app
+                    Socket["Socket.IO Service"]:::socket
+                    end
+                    end
+
+                    Firebase["Firebase Realtime DB"]:::db
+
+                    Client ==>|HTTPS / WSS| Cloudflare
+                    Cloudflare ==>|Secure Tunnel| Nginx
+
+                    Nginx -->|Static Assets| Frontend
+                    Nginx -->|/api/*| Backend
+                    Nginx -->|/socket.io/*| Socket
+
+                    Backend -->|Read / Write| Firebase
+                    Socket <==>|Bi-directional| Client
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Tunneling</h3>
+                    <p>Zero-trust access via Cloudflare Tunnel eliminates open public ports</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Reverse Proxy</h3>
+                    <p>Nginx handles SSL termination, routing, compression & security headers</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧩</div>
+                    <h3>Separation of Concerns</h3>
+                    <p>Distinct services for Frontend (static) and Backend (API & Logic)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Container Architecture Section -->
+    <section id="containers" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">DevOps</span>
+                <h2>Container Architecture</h2>
+                <p>Docker Compose orchestration for production deployment</p>
+            </div>
+
+            <div class="diagram-card">
+                <div class="mermaid">
+                    graph TB
+                    subgraph DockerCompose["Docker Compose Orchestration"]
+                    direction TB
+
+                    subgraph NginxContainer["Container: trailbeacon-nginx"]
+                    NginxConfig["nginx.conf"]
+                    Routing["Routing Rules"]
+                    SecHeaders["Security Headers"]
+                    end
+
+                    subgraph FrontendContainer["Container: trailbeacon-frontend"]
+                    ReactApp["React 18 SPA"]
+                    NginxStatic["Internal Nginx"]
+                    StaticAssets["Build Assets"]
+                    end
+
+                    subgraph BackendContainer["Container: trailbeacon-backend"]
+                    NodeRuntime["Node.js Runtime"]
+                    Express["Express App"]
+                    SocketSvc["Socket.IO Server"]
+                    RateLimit["Rate Limiters"]
+                    end
+
+                    NginxConfig <-->|trailbeacon-network| NginxStatic
+                        NginxConfig <-->|trailbeacon-network| Express
+                            end
+
+                            style NginxConfig fill:#e2e8f0,stroke:#718096,color:#2d3748
+                            style ReactApp fill:#bee3f8,stroke:#3182ce,color:#2c5282
+                            style NodeRuntime fill:#c6f6d5,stroke:#38a169,color:#22543d
+                </div>
+            </div>
+
+            <div class="container-cards">
+                <div class="container-card nginx">
+                    <div class="container-header">
+                        <span class="container-icon">🌐</span>
+                        <h3>Nginx</h3>
+                    </div>
+                    <ul>
+                        <li>Reverse Proxy</li>
+                        <li>SSL Termination</li>
+                        <li>Gzip Compression</li>
+                        <li>Security Headers</li>
+                    </ul>
+                    <span class="port">Port 80 (Public)</span>
+                </div>
+                <div class="container-card frontend">
+                    <div class="container-header">
+                        <span class="container-icon">⚛️</span>
+                        <h3>Frontend</h3>
+                    </div>
+                    <ul>
+                        <li>React 18 + TypeScript</li>
+                        <li>Leaflet Maps</li>
+                        <li>Socket.IO Client</li>
+                        <li>Static Assets</li>
+                    </ul>
+                    <span class="port">Port 80 (Internal)</span>
+                </div>
+                <div class="container-card backend">
+                    <div class="container-header">
+                        <span class="container-icon">🟢</span>
+                        <h3>Backend</h3>
+                    </div>
+                    <ul>
+                        <li>Node.js + Express</li>
+                        <li>Socket.IO Server</li>
+                        <li>JWT Authentication</li>
+                        <li>Rate Limiting</li>
+                    </ul>
+                    <span class="port">Port 5000 (Internal)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section id="security" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Defense in Depth</span>
+                <h2>Security Layers</h2>
+                <p>Multiple layers of protection for enterprise-grade security</p>
+            </div>
+
+            <div class="security-pyramid">
+                <div class="security-layer layer-1">
+                    <div class="layer-content">
+                        <h3>🌐 Network Layer</h3>
+                        <p>Cloudflare Tunnel + Nginx (DDoS Protection, Hide Real IP)</p>
+                    </div>
+                </div>
+                <div class="security-layer layer-2">
+                    <div class="layer-content">
+                        <h3>🚦 Traffic Layer</h3>
+                        <p>Rate Limiting + CORS + Helmet.js Headers</p>
+                    </div>
+                </div>
+                <div class="security-layer layer-3">
+                    <div class="layer-content">
+                        <h3>🔐 Auth Layer</h3>
+                        <p>JWT + Secure/HttpOnly Cookies + Strict Sessions</p>
+                    </div>
+                </div>
+                <div class="security-layer layer-4">
+                    <div class="layer-content">
+                        <h3>💾 Data Layer</h3>
+                        <p>Input Validation + Firebase Security Rules</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rate-limit-table">
+                <h3>Rate Limiting Strategy</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Endpoint Type</th>
+                            <th>Limit</th>
+                            <th>Window</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>General API</code></td>
+                            <td><span class="limit-badge green">100</span></td>
+                            <td>15 min</td>
+                            <td>Normal traffic flow</td>
+                        </tr>
+                        <tr>
+                            <td><code>Event Creation</code></td>
+                            <td><span class="limit-badge blue">20</span></td>
+                            <td>1 hour</td>
+                            <td>Spam prevention</td>
+                        </tr>
+                        <tr>
+                            <td><code>Auth Login</code></td>
+                            <td><span class="limit-badge orange">5</span></td>
+                            <td>15 min</td>
+                            <td>Brute-force protection</td>
+                        </tr>
+                        <tr>
+                            <td><code>Password Change</code></td>
+                            <td><span class="limit-badge red">3</span></td>
+                            <td>1 hour</td>
+                            <td>Account security</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Section -->
+    <section id="realtime" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">WebSockets</span>
+                <h2>Real-time Communication</h2>
+                <p>Bidirectional data flow for instant location updates</p>
+            </div>
+
+            <div class="diagram-card">
+                <div class="mermaid">
+                    sequenceDiagram
+                    participant Hiker as Hiker Device
+                    participant Cloud as TrailBeacon Server
+                    participant DB as Firebase DB
+                    participant Dashboard as Admin Dashboard
+
+                    Note over Hiker, Dashboard: Real-Time Location Tracking Flow
+
+                    Hiker->>Cloud: Emits 'updateLocation' (Socket.IO)
+                    activate Cloud
+
+                    par Persistence
+                    Cloud->>DB: Save Coordinates
+                    and Broadcast
+                    Cloud->>Dashboard: Broadcast 'locationUpdate' Event
+                    end
+
+                    deactivate Cloud
+
+                    activate Dashboard
+                    Dashboard->>Dashboard: Update Map Marker (React State)
+                    Note right of Dashboard: Dashboard updates instantly without refreshing
+                    deactivate Dashboard
+                </div>
+            </div>
+
+            <div class="realtime-features">
+                <div class="rt-feature">
+                    <span class="rt-icon">📍</span>
+                    <h4>Live Location</h4>
+                    <p>GPS coordinates updated in real-time on the interactive map</p>
+                </div>
+                <div class="rt-feature">
+                    <span class="rt-icon">🆘</span>
+                    <h4>SOS Alerts</h4>
+                    <p>Instant emergency notifications with priority handling</p>
+                </div>
+                <div class="rt-feature">
+                    <span class="rt-icon">🔋</span>
+                    <h4>Battery Monitoring</h4>
+                    <p>Live device battery status updates</p>
+                </div>
+                <div class="rt-feature">
+                    <span class="rt-icon">📊</span>
+                    <h4>Track History</h4>
+                    <p>Complete movement trail with timestamps</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SQA Section -->
+    <section id="sqa" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Quality Assurance</span>
+                <h2>SQA Activities Mapping</h2>
+                <p>ISO/IEC 25010 Quality Characteristics mapped to testing activities</p>
+            </div>
+
+            <div class="sqa-table-container">
+                <table class="sqa-table">
+                    <thead>
+                        <tr>
+                            <th>Quality Characteristic</th>
+                            <th>SQA Activity</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge functional">Functional Suitability</span>
+                            </td>
+                            <td>Requirement reviews, functional testing</td>
+                            <td>User acceptance testing, feature validation</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge performance">Performance Efficiency</span>
+                            </td>
+                            <td>Load & stress testing</td>
+                            <td>Socket.IO connection limits, API response benchmarks</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge usability">Usability</span>
+                            </td>
+                            <td>User testing, UI reviews</td>
+                            <td>Responsive design testing, accessibility checks</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge reliability">Reliability</span>
+                            </td>
+                            <td>Fault injection, recovery testing</td>
+                            <td>Graceful shutdown handling, auto-restart policies</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge security">Security</span>
+                            </td>
+                            <td>Penetration testing, access control</td>
+                            <td>Rate limiting, JWT auth, Helmet.js headers</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge maintainability">Maintainability</span>
+                            </td>
+                            <td>Code reviews, unit tests</td>
+                            <td>TypeScript, modular architecture, ESLint</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sqa-badge portability">Portability</span>
+                            </td>
+                            <td>Dockerization, CI/CD pipelines</td>
+                            <td>Docker Compose, GitHub Actions, multi-env config</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Technologies</span>
+                <h2>Tech Stack</h2>
+                <p>Modern tools and frameworks powering TrailBeacon</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>Frontend</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+                                alt="React">
+                            <span>React 18</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+                                alt="TypeScript">
+                            <span>TypeScript</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/leaflet/leaflet-original.svg"
+                                alt="Leaflet">
+                            <span>Leaflet</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg"
+                                alt="Socket.IO">
+                            <span>Socket.IO</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>Backend</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+                                alt="Node.js">
+                            <span>Node.js</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg"
+                                alt="Express" style="filter: invert(1);">
+                            <span>Express</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg"
+                                alt="Firebase">
+                            <span>Firebase</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo" src="https://cdn.simpleicons.org/jsonwebtokens/white" alt="JWT">
+                            <span>JWT</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>DevOps</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+                                alt="Docker">
+                            <span>Docker</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg"
+                                alt="Nginx">
+                            <span>Nginx</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo" src="https://cdn.simpleicons.org/cloudflare/F38020" alt="Cloudflare">
+                            <span>Cloudflare</span>
+                        </div>
+                        <div class="tech-item">
+                            <img class="tech-logo"
+                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/githubactions/githubactions-original.svg"
+                                alt="GitHub Actions">
+                            <span>GitHub Actions</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h3>Hardware/IoT</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <div class="tech-icon-wrapper">
+                                <span class="tech-emoji">📡</span>
+                            </div>
+                            <div class="tech-text">
+                                <span class="tech-name">ESP32</span>
+                                <span class="tech-subtitle">Dual-Core</span>
+                            </div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon-wrapper">
+                                <span class="tech-emoji">🛰️</span>
+                            </div>
+                            <div class="tech-text">
+                                <span class="tech-name">ATGM336H</span>
+                                <span class="tech-subtitle">GPS</span>
+                            </div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon-wrapper">
+                                <span class="tech-emoji">📶</span>
+                            </div>
+                            <div class="tech-text">
+                                <span class="tech-name">LoRa</span>
+                                <span class="tech-subtitle">SX1278</span>
+                            </div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon-wrapper">
+                                <span class="tech-emoji">📺</span>
+                            </div>
+                            <div class="tech-text">
+                                <span class="tech-name">OLED</span>
+                                <span class="tech-subtitle">SSD1306</span>
+                            </div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon-wrapper">
+                                <span class="tech-emoji">⚙️</span>
+                            </div>
+                            <div class="tech-text">
+                                <span class="tech-name">PlatformIO</span>
+                                <span class="tech-subtitle">IDE</span>
+                            </div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon-wrapper">
+                                <span class="tech-emoji">🔧</span>
+                            </div>
+                            <div class="tech-text">
+                                <span class="tech-name">Arduino</span>
+                                <span class="tech-subtitle">Framework</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contributors Section -->
+    <section id="contributors" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Team</span>
+                <h2>Contributors</h2>
+                <p>The team behind TrailBeacon</p>
+            </div>
+
+            <div class="contributors-grid">
+                <div class="contributor-card">
+                    <div class="contributor-image">
+                        <img src="assets/Hafeez.jpg" alt="Muhammad Hafeez">
+                    </div>
+                    <div class="contributor-info">
+                        <h3>MUHAMMAD HAFEEZ BIN ILIAS</h3>
+                        <span class="contributor-id">292892</span>
+                        <span class="contributor-role innovator">Innovator</span>
+                        <p class="contributor-title">Computer Science Student</p>
+                    </div>
+                </div>
+
+                <div class="contributor-card">
+                    <div class="contributor-image">
+                        <img src="assets/SirHanis.png" alt="Ahmad Hanis">
+                    </div>
+                    <div class="contributor-info">
+                        <h3>AHMAD HANIS BIN MOHD SHABLI</h3>
+                        <span class="contributor-id">TBA</span>
+                        <span class="contributor-role supervisor">Supervisor</span>
+                        <p class="contributor-title">Project Supervisor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="logo512.png" alt="TrailBeacon" class="logo-icon">
+                    <span>TrailBeacon</span>
+                </div>
+                <p>Final Year Project - Real-time Hiker Tracking System</p>
+                <p class="footer-date">December 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#4299e1',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#3182ce',
+                lineColor: '#718096',
+                secondaryColor: '#f7fafc',
+                tertiaryColor: '#edf2f7'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            sequence: {
+                useMaxWidth: true,
+                mirrorActors: false
+            }
+        });
+
+        // Mobile nav toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-header, .diagram-card, .feature-card, .feature-showcase-card, .container-card, .security-layer, .tech-category, .device-card, .gps-feature, .pipeline-step, .spec-box, .stat-card, .contributor-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
